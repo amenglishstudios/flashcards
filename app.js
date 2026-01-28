@@ -9,18 +9,55 @@
 // CONFIG: PASTE YOUR ACTIVITY HERE
 // ==============================
 const ACTIVITY = {
-  title: "Scrambled Essay Activity",
-  // Sentences in correct final order:
+  title: "“The Fun They Had” — Scrambled Essay",
   sentences: [
-    // Example demo (replace with your own)
-    "Many people believe school is always the best place to learn.",
-    "They may say teachers and classmates help students improve.",
-    "However, some students learn better in different ways.",
-    "In my opinion, learning should include both structure and choice."
+    "Many people have strong opinions about how students should learn.",
+    "They may say that their way of learning is the best.",
+    "However, everyone is different, so it’s important to be considerate of this when choosing the best learning method.",
+    "In my opinion, the way Margie and Tommy learn in “The Fun They Had” is a strong option for certain students.",
+
+    "Students who learn faster or slower than the rest of the class can benefit from Margie and Tommy’s learning style.",
+    "In today’s classroom, students who learn faster feel bored, and students who learn slower feel frustrated.",
+    "For example, if a student finishes the work quickly, they may get tired while waiting for the rest of the class to finish.",
+    "This means that slower or faster students can benefit a lot from a teacher that stays on their pace.",
+
+    "In addition, students who often feel social pressure can have a good experience learning alone with a robotic teacher.",
+    "When these students are in a classroom full of students, they can feel too anxious to participate and miss out on learning.",
+    "For example, there are a lot of group activities that can make some kids uncomfortable.",
+    "This means that students with social anxiety can learn more in a classroom by themselves.",
+
+    "In conclusion, “The Fun They Had” is a possible future for how we learn in school.",
+    "We should pay attention to how schools change and speak out when we disagree.",
+    "If we learn best alone with a mechanical teacher, then it should be an option.",
+    "However, there should also be options for students who don’t want to learn this way."
   ],
-  // Optional: override chunks per sentence (recommended once you generate)
-  // If omitted, chunks will be auto-generated using default chunk sizes.
-  chunksBySentence: null
+
+  // IMPORTANT: these chunks match your PDF exactly (same wording/punctuation)
+  chunksBySentence: [
+    // Intro
+    ["Many people", "have strong", "opinions about", "how students", "should learn."],
+    ["They may", "say that", "their way", "of learning", "is the best."],
+    ["However, everyone is different,", "so it’s important", "to be considerate", "of this", "when choosing", "the best learning method."],
+    ["In my opinion,", "the way Margie", "and Tommy learn", "in “The Fun They Had”", "is a strong option", "for certain students."],
+
+    // Body 1
+    ["Students who learn", "faster or slower", "than the rest", "of the class", "can benefit from", "Margie and Tommy’s", "learning style."],
+    ["In today’s classroom,", "students who learn", "faster feel bored,", "and students", "who learn slower", "feel frustrated."],
+    ["For example,", "if a student finishes", "the work quickly,", "they may get tired", "while waiting for", "the rest of the class", "to finish."],
+    ["This means", "that slower or faster", "students can benefit", "a lot from a teacher", "that stays on their pace."],
+
+    // Body 2
+    ["In addition,", "students who often feel", "social pressure", "can have a good experience", "learning alone", "with a robotic teacher."],
+    ["When these students", "are in a classroom", "full of students,", "they can feel too anxious", "to participate", "and miss out on learning."],
+    ["For example,", "there are a lot of", "group activities", "that can make", "some kids uncomfortable."],
+    ["This means", "that students", "with social anxiety", "can learn more", "in a classroom", "by themselves."],
+
+    // Conclusion
+    ["In conclusion,", "“The Fun They Had”", "is a possible future", "for how we learn", "in school."],
+    ["We should", "pay attention", "to how schools change", "and speak out", "when we disagree."],
+    ["If we learn best alone", "with a mechanical teacher,", "then it", "should be an option."],
+    ["However,", "there should also be options", "for students", "who don’t", "want to learn this way."]
+  ]
 };
 
 // Default chunk size for auto chunking (teacher tools can generate better draft)
