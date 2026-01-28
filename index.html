@@ -3,230 +3,77 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Vocab SRS (Memrise-style)</title>
+  <title>Scrambled Essay Builder</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="logo">🧠</div>
+      <div class="dot" aria-hidden="true"></div>
       <div>
-        <div class="title">Vocab SRS</div>
-        <div class="subtitle">Spaced repetition • MC + Spelling + Listening</div>
+        <div class="title">Scrambled Essay Builder</div>
+        <div class="subtitle">Rebuild sentences → order the essay</div>
       </div>
     </div>
-
-    <nav class="tabs" role="tablist" aria-label="App sections">
-      <button class="tab active" role="tab" aria-selected="true" data-tab="teacher">Teacher</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="study">Student</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="about">About</button>
-    </nav>
+    <div class="top-actions">
+      <button id="btnResetAll" class="btn secondary" type="button">Reset All</button>
+    </div>
   </header>
 
   <main class="wrap">
-    <!-- TEACHER -->
-    <section class="panel active" id="tab-teacher" role="tabpanel">
-      <div class="grid2">
-        <div class="card">
-          <h2>Deck</h2>
-          <div class="row">
-            <label class="lbl" for="deckTitle">Deck title</label>
-            <input id="deckTitle" type="text" placeholder="e.g., Unit 3 Academic Words" />
-          </div>
-          <div class="row">
-            <button id="btnSaveDeckTitle" class="btn">Save title</button>
-            <button id="btnNewDeck" class="btn btn-ghost">New deck</button>
-          </div>
-
-          <hr class="sep" />
-
-          <h3>Add a term</h3>
-          <div class="row">
-            <label class="lbl" for="termInput">Term</label>
-            <input id="termInput" type="text" placeholder="term" autocomplete="off" />
-          </div>
-          <div class="row">
-            <label class="lbl" for="defInput">Definition</label>
-            <textarea id="defInput" placeholder="definition" rows="3"></textarea>
-          </div>
-          <div class="row">
-            <label class="lbl" for="exInput">Example (optional)</label>
-            <textarea id="exInput" placeholder="example sentence" rows="2"></textarea>
-          </div>
-          <div class="row">
-            <button id="btnAddItem" class="btn btn-primary">Add</button>
-            <button id="btnClearForm" class="btn btn-ghost">Clear</button>
-          </div>
-          <p class="muted small">
-            Tip: Keep definitions short for better multiple-choice distractors.
+    <section class="card">
+      <div class="row">
+        <div>
+          <h1 id="stageTitle">Sentence Builder</h1>
+          <p id="stageDesc" class="muted">
+            Drag chunks into the slots to rebuild the sentence. Or tap a chunk, then tap a slot.
           </p>
         </div>
-
-        <div class="card">
-          <h2>Import / Export</h2>
-
-          <div class="row">
-            <button id="btnExportDeck" class="btn">Download deck (.json)</button>
-            <button id="btnExportCSV" class="btn btn-ghost">Download as CSV</button>
-          </div>
-
-          <div class="row">
-            <label class="file">
-              <input id="importFile" type="file" accept=".json,.csv,text/csv,application/json" />
-              <span class="btn">Import deck (JSON/CSV)</span>
-            </label>
-          </div>
-
-          <hr class="sep" />
-
-          <h3>Deck items</h3>
-          <div class="row">
-            <input id="searchItems" type="text" placeholder="Search terms/definitions…" />
-            <button id="btnResetProgress" class="btn btn-warn">Reset student progress</button>
-          </div>
-
-          <div class="tableWrap">
-            <table class="table" aria-label="Deck items table">
-              <thead>
-                <tr>
-                  <th>Term</th>
-                  <th>Definition</th>
-                  <th>Due</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="itemsTbody"></tbody>
-            </table>
-          </div>
-
-          <div class="muted small">
-            Reset progress keeps the terms but clears scheduling so students start fresh.
-          </div>
-        </div>
+        <div class="pill" id="progressPill" aria-live="polite"></div>
       </div>
+
+      <div id="app"></div>
     </section>
 
-    <!-- STUDENT -->
-    <section class="panel" id="tab-study" role="tabpanel">
-      <div class="grid2">
-        <div class="card">
-          <h2>Study setup</h2>
+    <section class="card teacher">
+      <details>
+        <summary>Teacher Tools (create new scrambled essays)</summary>
+        <div class="teacher-grid">
+          <div>
+            <label for="teacherEssay">Paste essay text (one sentence per line is best)</label>
+            <textarea id="teacherEssay" rows="10" placeholder="Paste essay here..."></textarea>
 
-          <div class="row">
-            <label class="lbl" for="studyDeckTitle">Deck</label>
-            <input id="studyDeckTitle" type="text" disabled />
-          </div>
-
-          <div class="row">
-            <label class="lbl" for="modeSelect">Practice mode</label>
-            <select id="modeSelect">
-              <option value="mixed">Mixed (recommended)</option>
-              <option value="mc">Multiple choice (term → definition)</option>
-              <option value="type_def">Type from definition (spell)</option>
-              <option value="type_audio">Type from audio (spell)</option>
-            </select>
-          </div>
-
-          <div class="row">
-            <label class="lbl" for="dailyLimit">Session size</label>
-            <select id="dailyLimit">
-              <option value="10">10 cards</option>
-              <option value="20" selected>20 cards</option>
-              <option value="40">40 cards</option>
-              <option value="9999">All due</option>
-            </select>
-          </div>
-
-          <div class="row">
-            <button id="btnStartStudy" class="btn btn-primary">Start</button>
-            <button id="btnStudyAhead" class="btn btn-ghost">Study ahead</button>
-          </div>
-
-          <div class="stats">
-            <div class="stat"><div class="k" id="statTotal">0</div><div class="v">Total</div></div>
-            <div class="stat"><div class="k" id="statDue">0</div><div class="v">Due now</div></div>
-            <div class="stat"><div class="k" id="statNew">0</div><div class="v">New</div></div>
-          </div>
-
-          <p class="muted small">
-            Your progress is saved on this device (local storage). Use Import/Export to share a deck with students.
-          </p>
-        </div>
-
-        <div class="card">
-          <h2>Study</h2>
-
-          <div id="studyEmpty" class="muted">
-            Click <b>Start</b> to begin. If there are no due cards, try <b>Study ahead</b>.
-          </div>
-
-          <div id="studyUI" class="studyUI hidden">
-            <div class="studyTop">
-              <div class="pill" id="pillMode">Mode: Mixed</div>
-              <div class="pill" id="pillProgress">0 / 0</div>
-              <div class="pill" id="pillDue">Due</div>
-            </div>
-
-            <div class="prompt" id="prompt"></div>
-
-            <div class="mc hidden" id="mcBox" role="group" aria-label="Multiple choice answers"></div>
-
-            <div class="typing hidden" id="typingBox">
-              <input id="typingInput" type="text" placeholder="Type your answer…" autocomplete="off" />
-              <div class="row">
-                <button id="btnSubmitTyping" class="btn btn-primary">Submit</button>
-                <button id="btnHint" class="btn btn-ghost">Hint</button>
-                <button id="btnReveal" class="btn btn-ghost">Reveal</button>
+            <div class="row tight">
+              <div class="field">
+                <label for="minWords">Chunk size (min)</label>
+                <input id="minWords" type="number" min="2" max="8" value="3" />
               </div>
+              <div class="field">
+                <label for="maxWords">Chunk size (max)</label>
+                <input id="maxWords" type="number" min="2" max="8" value="4" />
+              </div>
+              <button id="btnGenerate" class="btn" type="button">Generate JSON</button>
             </div>
 
-            <div class="audioRow hidden" id="audioRow">
-              <button id="btnSpeak" class="btn">🔊 Listen</button>
-              <button id="btnSpeakSlow" class="btn btn-ghost">🐢 Slow</button>
-            </div>
+            <p class="muted small">
+              Tip: If your essay has abbreviations (e.g., “U.S.”), consider one sentence per line to avoid bad splits.
+            </p>
+          </div>
 
-            <div class="feedback" id="feedback"></div>
-
-            <div class="gradeRow hidden" id="gradeRow" aria-label="Rate your recall">
-              <button class="btn btn-warn" data-grade="again">Again</button>
-              <button class="btn" data-grade="hard">Hard</button>
-              <button class="btn btn-primary" data-grade="good">Good</button>
-              <button class="btn btn-ghost" data-grade="easy">Easy</button>
-            </div>
-
-            <div class="studyBottom">
-              <button id="btnQuit" class="btn btn-ghost">Quit</button>
-              <button id="btnNext" class="btn hidden">Next</button>
-            </div>
+          <div>
+            <label for="teacherOut">Generated JSON (copy into <code>app.js</code> CONFIG)</label>
+            <textarea id="teacherOut" rows="14" readonly></textarea>
+            <p class="muted small">
+              This generator makes a reasonable first draft. You can edit chunks later in the CONFIG.
+            </p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="panel" id="tab-about" role="tabpanel">
-      <div class="card">
-        <h2>How it works</h2>
-        <p>
-          This app schedules vocabulary reviews using a spaced repetition algorithm (SM-2 style).
-          Each term has a <b>due date</b>. When students answer, they rate their recall:
-          <b>Again / Hard / Good / Easy</b>. That rating adjusts the next interval.
-        </p>
-        <ul>
-          <li><b>Multiple choice:</b> term → pick definition</li>
-          <li><b>Spelling (definition):</b> definition → type the word</li>
-          <li><b>Spelling (audio):</b> hear the word → type the word</li>
-        </ul>
-        <p class="muted">
-          Everything runs locally in the browser. No logins, no server. For multi-device classroom use,
-          export a deck (.json) and have students import it on their devices.
-        </p>
-      </div>
+      </details>
     </section>
   </main>
 
   <footer class="footer">
-    <span class="muted small">Made for classroom vocab practice • Offline-friendly</span>
+    <span class="muted small">Local-only version. No student data is sent anywhere.</span>
   </footer>
 
   <script src="app.js"></script>
